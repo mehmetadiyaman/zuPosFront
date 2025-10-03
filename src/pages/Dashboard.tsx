@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Outlet } from "react-router-dom";
 // import type {} from '@mui/x-date-pickers/themeAugmentation';
 // import type {} from '@mui/x-charts/themeAugmentation';
 // import type {} from '@mui/x-data-grid-pro/themeAugmentation';
@@ -9,10 +10,10 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import AppNavbar from "../components/navigation/AppNavbar";
 import Header from "../components/layout/Header";
-import MainGrid from "../components/layout/MainGrid";
 import SideMenu from "../components/navigation/SideMenu";
 // import AppTheme from '../shared-theme/AppTheme'; // TODO: AppTheme'i implement et
 // import {
+
 //   chartsCustomizations,
 //   dataGridCustomizations,
 //   datePickersCustomizations,
@@ -54,7 +55,10 @@ export default function Dashboard() {
             }}
           >
             <Header />
-            <MainGrid />
+            {/* Nested routes varsa onları render et, yoksa MainGrid'i göster */}
+            <React.Suspense fallback={<div>Loading...</div>}>
+              <Outlet />
+            </React.Suspense>
           </Stack>
         </Box>
       </Box>

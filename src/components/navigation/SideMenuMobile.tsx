@@ -1,15 +1,14 @@
-import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Drawer, { drawerClasses } from "@mui/material/Drawer";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { alpha } from "@mui/material/styles";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 import MenuButton from "./MenuButton";
 import MenuContent from "./MenuContent";
-import CardAlert from "../ui/CardAlert";
 
 interface SideMenuMobileProps {
   open: boolean | undefined;
@@ -29,7 +28,14 @@ export default function SideMenuMobile({
         zIndex: (theme) => theme.zIndex.drawer + 1,
         [`& .${drawerClasses.paper}`]: {
           backgroundImage: "none",
-          backgroundColor: "background.paper",
+          background: (theme) =>
+            `linear-gradient(180deg, ${alpha(
+              theme.palette.primary.main,
+              0.02
+            )} 0%, ${alpha(theme.palette.background.paper, 1)} 100%)`,
+          backdropFilter: "blur(20px)",
+          borderLeft: (theme) =>
+            `1px solid ${alpha(theme.palette.divider, 0.12)}`,
         },
       }}
     >
@@ -39,18 +45,39 @@ export default function SideMenuMobile({
           height: "100%",
         }}
       >
-        <Stack direction="row" sx={{ p: 2, pb: 0, gap: 1 }}>
+        <Stack
+          direction="row"
+          sx={{
+            p: 2,
+            pb: 0,
+            gap: 1,
+            background: (theme) => alpha(theme.palette.primary.main, 0.04),
+          }}
+        >
           <Stack
             direction="row"
-            sx={{ gap: 1, alignItems: "center", flexGrow: 1, p: 1 }}
+            sx={{ gap: 1.5, alignItems: "center", flexGrow: 1, p: 1 }}
           >
             <Avatar
-              sizes="small"
               alt="Riley Carter"
               src="/static/images/avatar/7.jpg"
-              sx={{ width: 24, height: 24 }}
+              sx={{
+                width: 32,
+                height: 32,
+                border: (theme) =>
+                  `2px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+                boxShadow: (theme) =>
+                  `0 2px 8px ${alpha(theme.palette.primary.main, 0.2)}`,
+              }}
             />
-            <Typography component="p" variant="h6">
+            <Typography
+              component="p"
+              variant="h6"
+              sx={{
+                fontWeight: 600,
+                color: "text.primary",
+              }}
+            >
               Riley Carter
             </Typography>
           </Stack>
@@ -58,19 +85,46 @@ export default function SideMenuMobile({
             <NotificationsRoundedIcon />
           </MenuButton>
         </Stack>
-        <Divider />
+        <Divider
+          sx={{
+            borderColor: (theme) => alpha(theme.palette.primary.main, 0.1),
+            mx: 2,
+          }}
+        />
         <Stack sx={{ flexGrow: 1 }}>
           <MenuContent />
-          <Divider />
+          <Divider
+            sx={{
+              borderColor: (theme) => alpha(theme.palette.primary.main, 0.1),
+              mx: 2,
+            }}
+          />
         </Stack>
-        <CardAlert />
-        <Stack sx={{ p: 2 }}>
+        <Stack
+          sx={{
+            p: 2,
+            background: (theme) => alpha(theme.palette.primary.main, 0.02),
+          }}
+        >
           <Button
             variant="outlined"
             fullWidth
             startIcon={<LogoutRoundedIcon />}
+            sx={{
+              borderRadius: 2,
+              py: 1.2,
+              fontWeight: 500,
+              textTransform: "none",
+              border: (theme) =>
+                `1px solid ${alpha(theme.palette.primary.main, 0.3)}`,
+              "&:hover": {
+                background: (theme) => alpha(theme.palette.primary.main, 0.08),
+                border: (theme) =>
+                  `1px solid ${alpha(theme.palette.primary.main, 0.5)}`,
+              },
+            }}
           >
-            Logout
+            Çıkış Yap
           </Button>
         </Stack>
       </Stack>

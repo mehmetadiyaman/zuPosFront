@@ -8,6 +8,8 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import LoginPage from "./pages/LoginPage";
 import Dashboard from "./pages/Dashboard";
+import DepoTanimlama from "./pages/STOK_TANIMLARI/DepoTanimlama";
+import MainGrid from "./components/layout/MainGrid";
 import { AuthProvider } from "./contexts/AuthContext";
 
 // ZuPOS teması - Restoran yönetimi için özel tasarlanmış
@@ -73,7 +75,13 @@ function App() {
         <Router>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />}>
+              <Route index element={<MainGrid />} />
+              <Route
+                path="stok-tanimlari/depo-tanimlama"
+                element={<DepoTanimlama />}
+              />
+            </Route>
             <Route path="/" element={<Navigate to="/login" replace />} />
           </Routes>
         </Router>
