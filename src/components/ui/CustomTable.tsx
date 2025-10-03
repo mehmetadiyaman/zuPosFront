@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import {
   Card,
   CardContent,
@@ -11,9 +11,11 @@ import {
   Typography,
   Box,
   Stack,
+  Pagination,
   useTheme,
   alpha,
 } from "@mui/material";
+import Search from "./Search";
 
 export interface TableColumn {
   key: string;
@@ -32,6 +34,10 @@ export interface CustomTableProps {
   actions?: React.ReactNode;
   onRowClick?: (row: Record<string, unknown>) => void;
   maxHeight?: number | string;
+  searchable?: boolean;
+  searchPlaceholder?: string;
+  rowsPerPage?: number;
+  showPagination?: boolean;
 }
 
 const CustomTable: React.FC<CustomTableProps> = ({
@@ -42,8 +48,37 @@ const CustomTable: React.FC<CustomTableProps> = ({
   actions,
   onRowClick,
   maxHeight,
+  searchable = false,
+  searchPlaceholder = "Ara...",
+  rowsPerPage = 10,
+  showPagination = true,
 }) => {
   const theme = useTheme();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Filter data based on search term
+  const filteredData = useMemo(() => {
+    if (!searchable || !searchTerm) return data;
+
+    return data.filter((row) =>
+      Object.values(row).some((value) =>
+        String(value).toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+  }, [data, searchTerm, searchable]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = startIndex + rowsPerPage;
+  const paginatedData = showPagination
+    ? filteredData.slice(startIndex, endIndex)
+    : filteredData;
+
+  const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <Card
@@ -86,6 +121,18 @@ const CustomTable: React.FC<CustomTableProps> = ({
           </Box>
           {actions && <Box>{actions}</Box>}
         </Stack>
+
+        {/* Search Field */}
+        {searchable && (
+          <Box sx={{ mt: 2 }}>
+            <Search
+              value={searchTerm}
+              onChange={setSearchTerm}
+              placeholder={searchPlaceholder}
+              width={400}
+            />
+          </Box>
+        )}
       </Box>
 
       {/* Table Content */}
@@ -138,7 +185,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
 
             {/* Table Body */}
             <TableBody>
-              {data.map((row, rowIndex) => (
+              {paginatedData.map((row, rowIndex) => (
                 <TableRow
                   key={rowIndex}
                   sx={{
@@ -152,7 +199,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
                       border: "none",
                       py: 2.5,
                       borderBottom:
-                        rowIndex === data.length - 1
+                        rowIndex === paginatedData.length - 1
                           ? "none"
                           : `1px solid ${alpha(theme.palette.divider, 0.5)}`,
                     },
@@ -185,6 +232,34 @@ const CustomTable: React.FC<CustomTableProps> = ({
             </TableBody>
           </Table>
         </TableContainer>
+
+        {/* Pagination */}
+        {showPagination && totalPages > 1 && (
+          <Box
+            sx={{
+              p: 2,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              borderTop: `1px solid ${alpha(theme.palette.divider, 0.5)}`,
+            }}
+          >
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+              Showing page {currentPage} of {totalPages}
+            </Typography>
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              size="small"
+              sx={{
+                "& .MuiPaginationItem-root": {
+                  borderRadius: 2,
+                },
+              }}
+            />
+          </Box>
+        )}
       </CardContent>
     </Card>
   );

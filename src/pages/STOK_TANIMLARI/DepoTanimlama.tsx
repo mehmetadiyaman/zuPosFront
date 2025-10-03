@@ -22,11 +22,10 @@ import CustomTable from "../../components/ui/CustomTable";
 
 interface Depo {
   id: number;
-  kod: string;
   ad: string;
-  aciklama: string;
-  aktif: boolean;
-  olusturmaTarihi: string;
+  kod: string;
+  devirTipi: string;
+  durum: string;
 }
 
 const DepoTanimlama: React.FC = () => {
@@ -34,41 +33,59 @@ const DepoTanimlama: React.FC = () => {
   const [depolar] = useState<Depo[]>([
     {
       id: 1,
-      kod: "ANA001",
-      ad: "Ana Depo",
-      aciklama: "Ana merkez deposu",
-      aktif: true,
-      olusturmaTarihi: "2024-01-15",
+      ad: "AEVERV",
+      kod: "AERGV",
+      devirTipi: "Reçeteli Mamul",
+      durum: "Aktif",
     },
     {
       id: 2,
-      kod: "SAT001",
-      ad: "Satış Deposu",
-      aciklama: "Satış noktası deposu",
-      aktif: true,
-      olusturmaTarihi: "2024-02-10",
+      ad: "AFRBF",
+      kod: "ERAVFV",
+      devirTipi: "Reçeteli Mamul",
+      durum: "Aktif",
     },
     {
       id: 3,
-      kod: "YED001",
-      ad: "Yedek Depo",
-      aciklama: "Yedek malzeme deposu",
-      aktif: false,
-      olusturmaTarihi: "2024-03-05",
+      ad: "AVVB",
+      kod: "AFBADR",
+      devirTipi: "Reçeteli Mamul",
+      durum: "Aktif",
+    },
+    {
+      id: 4,
+      ad: "Deneme3hhhh",
+      kod: "4555",
+      devirTipi: "Reçeteli Mamul",
+      durum: "Pasif",
+    },
+    {
+      id: 5,
+      ad: "fjgckc",
+      kod: "kcghkm",
+      devirTipi: "Reçeteli Mamul",
+      durum: "Aktif",
+    },
+    {
+      id: 6,
+      ad: "THGSRT",
+      kod: "RTH",
+      devirTipi: "Reçeteli Mamul",
+      durum: "Aktif",
     },
   ]);
 
   // Modal states
   const [openModal, setOpenModal] = useState(false);
   const [formData, setFormData] = useState({
-    kod: "",
     ad: "",
-    aciklama: "",
+    kod: "",
+    devirTipi: "",
   });
 
   // İstatistik verileri
-  const aktifDepolar = depolar.filter((d) => d.aktif).length;
-  const pasifDepolar = depolar.filter((d) => !d.aktif).length;
+  const aktifDepolar = depolar.filter((d) => d.durum === "Aktif").length;
+  const pasifDepolar = depolar.filter((d) => d.durum === "Pasif").length;
   const toplamDepo = depolar.length;
 
   // Örnek trend verileri (gerçek uygulamada API'dan gelir)
@@ -109,8 +126,20 @@ const DepoTanimlama: React.FC = () => {
   // Tablo kolonları
   const tableColumns = [
     {
+      key: "ad",
+      label: "Adı",
+      render: (value: unknown) => (
+        <Typography
+          variant="body2"
+          sx={{ fontWeight: 500, color: "text.primary" }}
+        >
+          {String(value)}
+        </Typography>
+      ),
+    },
+    {
       key: "kod",
-      label: "Kod",
+      label: "Kodu",
       render: (value: unknown) => (
         <Box
           sx={{
@@ -136,38 +165,21 @@ const DepoTanimlama: React.FC = () => {
       ),
     },
     {
-      key: "ad",
-      label: "Ad",
+      key: "devirTipi",
+      label: "Devir Tipi",
       render: (value: unknown) => (
-        <Typography
-          variant="body2"
-          sx={{ fontWeight: 500, color: "text.primary" }}
-        >
+        <Typography variant="body2" sx={{ color: "text.secondary" }}>
           {String(value)}
         </Typography>
       ),
     },
     {
-      key: "aciklama",
-      label: "Açıklama",
-      hideOn: "xs" as const,
-      render: (value: unknown) => (
-        <Typography
-          variant="body2"
-          sx={{ color: "text.secondary", maxWidth: 200 }}
-          noWrap
-        >
-          {String(value)}
-        </Typography>
-      ),
-    },
-    {
-      key: "aktif",
-      label: "Durum",
+      key: "durum",
+      label: "Durumu",
       render: (value: unknown) => (
         <Chip
-          label={value ? "Aktif" : "Pasif"}
-          color={value ? "success" : "error"}
+          label={String(value)}
+          color={value === "Aktif" ? "success" : "error"}
           size="small"
           sx={{
             fontWeight: 600,
@@ -175,19 +187,6 @@ const DepoTanimlama: React.FC = () => {
             height: 28,
           }}
         />
-      ),
-    },
-    {
-      key: "olusturmaTarihi",
-      label: "Oluşturma Tarihi",
-      hideOn: "xs" as const,
-      render: (value: unknown) => (
-        <Typography
-          variant="body2"
-          sx={{ color: "text.secondary", fontFamily: "monospace" }}
-        >
-          {String(value)}
-        </Typography>
       ),
     },
     {
@@ -234,7 +233,7 @@ const DepoTanimlama: React.FC = () => {
   // Modal ve form fonksiyonları
   const handleCloseModal = () => {
     setOpenModal(false);
-    setFormData({ kod: "", ad: "", aciklama: "" });
+    setFormData({ ad: "", kod: "", devirTipi: "" });
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -314,10 +313,13 @@ const DepoTanimlama: React.FC = () => {
 
       {/* Depo Listesi - CustomTable Component */}
       <CustomTable
-        title="Mevcut Depolar"
-        subtitle={`Sistemde kayıtlı ${depolar.length} adet depo bulunmaktadır`}
+        title="Depo Listesi"
         columns={tableColumns}
         data={depolar.map((depo) => ({ ...depo }))}
+        searchable={true}
+        searchPlaceholder="Search:"
+        rowsPerPage={5}
+        showPagination={true}
         actions={
           <Button
             variant="contained"
@@ -403,20 +405,6 @@ const DepoTanimlama: React.FC = () => {
         <Stack spacing={3}>
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
             <TextField
-              label="Depo Kodu"
-              variant="outlined"
-              placeholder="Örn: DEP001"
-              value={formData.kod}
-              onChange={(e) => handleInputChange("kod", e.target.value)}
-              size="small"
-              sx={{
-                flex: 1,
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: 2,
-                },
-              }}
-            />
-            <TextField
               label="Depo Adı"
               variant="outlined"
               placeholder="Depo adını giriniz"
@@ -430,17 +418,29 @@ const DepoTanimlama: React.FC = () => {
                 },
               }}
             />
+            <TextField
+              label="Depo Kodu"
+              variant="outlined"
+              placeholder="Örn: DEP001"
+              value={formData.kod}
+              onChange={(e) => handleInputChange("kod", e.target.value)}
+              size="small"
+              sx={{
+                flex: 1,
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 2,
+                },
+              }}
+            />
           </Stack>
 
           <TextField
             fullWidth
-            label="Açıklama"
+            label="Devir Tipi"
             variant="outlined"
-            placeholder="Depo açıklaması (opsiyonel)"
-            multiline
-            rows={3}
-            value={formData.aciklama}
-            onChange={(e) => handleInputChange("aciklama", e.target.value)}
+            placeholder="Devir tipini giriniz"
+            value={formData.devirTipi}
+            onChange={(e) => handleInputChange("devirTipi", e.target.value)}
             size="small"
             sx={{
               "& .MuiOutlinedInput-root": {
