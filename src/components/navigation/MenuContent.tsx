@@ -109,11 +109,11 @@ export default function MenuContent() {
   const getRouteForMenuItem = (controller: string, action: string) => {
     // Controller ve action'a göre route belirleme
     if (controller === "Store" && action === "Index") {
-      return "/dashboard/stok-tanimlari/depo-tanimlama";
+      return "/stok-tanimlari/depo-tanimlama";
     }
     // Diğer route'lar buraya eklenebilir
-    // Genel fallback: controller-action formatında
-    return `/dashboard/${controller?.toLowerCase() || "page"}/${
+    // Genel fallback: controller-action formatında (dashboard prefix'i olmadan)
+    return `/${controller?.toLowerCase() || "page"}/${
       action?.toLowerCase() || "index"
     }`;
   };

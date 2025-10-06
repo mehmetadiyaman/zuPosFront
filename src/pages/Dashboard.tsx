@@ -27,7 +27,11 @@ import SideMenu from "../components/navigation/SideMenu";
 //   ...treeViewCustomizations,
 // };
 
-export default function Dashboard() {
+interface DashboardProps {
+  children?: React.ReactNode;
+}
+
+export default function Dashboard({ children }: DashboardProps) {
   return (
     <>
       <CssBaseline enableColorScheme />
@@ -55,9 +59,9 @@ export default function Dashboard() {
             }}
           >
             <Header />
-            {/* Nested routes varsa onları render et, yoksa MainGrid'i göster */}
+            {/* Children varsa render et, yoksa Outlet kullan */}
             <React.Suspense fallback={<div>Loading...</div>}>
-              <Outlet />
+              {children || <Outlet />}
             </React.Suspense>
           </Stack>
         </Box>

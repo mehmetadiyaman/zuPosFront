@@ -74,14 +74,30 @@ function App() {
       <AuthProvider>
         <Router>
           <Routes>
+            {/* Login sayfası - sidebar olmadan */}
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/dashboard" element={<Dashboard />}>
-              <Route index element={<MainGrid />} />
-              <Route
-                path="stok-tanimlari/depo-tanimlama"
-                element={<DepoTanimlama />}
-              />
-            </Route>
+
+            {/* Ana dashboard sayfası */}
+            <Route
+              path="/dashboard"
+              element={
+                <Dashboard>
+                  <MainGrid />
+                </Dashboard>
+              }
+            />
+
+            {/* Stok Tanımları sayfaları */}
+            <Route
+              path="/stok-tanimlari/depo-tanimlama"
+              element={
+                <Dashboard>
+                  <DepoTanimlama />
+                </Dashboard>
+              }
+            />
+
+            {/* Root redirect */}
             <Route path="/" element={<Navigate to="/login" replace />} />
           </Routes>
         </Router>
