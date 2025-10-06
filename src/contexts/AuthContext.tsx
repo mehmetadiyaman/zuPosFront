@@ -33,8 +33,17 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export { AuthContext };
 
 // ZuPOS ASP.NET Core endpoint'leri (environment variables'dan alınır)
-const WEB_PANEL_URL = import.meta.env.VITE_WEB_PANEL_URL;
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const WEB_PANEL_URL =
+  import.meta.env.VITE_WEB_PANEL_URL || "http://localhost:5287";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5185/api";
+
+// Debug için URL'leri console'a yazdır
+console.log("Environment Variables:", {
+  WEB_PANEL_URL,
+  API_BASE_URL,
+  env: import.meta.env,
+});
 
 interface AuthProviderProps {
   children: ReactNode;

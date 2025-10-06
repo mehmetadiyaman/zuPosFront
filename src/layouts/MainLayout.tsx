@@ -1,9 +1,5 @@
 import * as React from "react";
 import { Outlet } from "react-router-dom";
-// import type {} from '@mui/x-date-pickers/themeAugmentation';
-// import type {} from '@mui/x-charts/themeAugmentation';
-// import type {} from '@mui/x-data-grid-pro/themeAugmentation';
-// import type {} from '@mui/x-tree-view/themeAugmentation';
 import { alpha } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
@@ -11,27 +7,12 @@ import Stack from "@mui/material/Stack";
 import AppNavbar from "../components/navigation/AppNavbar";
 import Header from "../components/layout/Header";
 import SideMenu from "../components/navigation/SideMenu";
-// import AppTheme from '../shared-theme/AppTheme'; // TODO: AppTheme'i implement et
-// import {
 
-//   chartsCustomizations,
-//   dataGridCustomizations,
-//   datePickersCustomizations,
-//   treeViewCustomizations,
-// } from '../styles/theme/customizations';
-
-// const xThemeComponents = {
-//   ...chartsCustomizations,
-//   ...dataGridCustomizations,
-//   ...datePickersCustomizations,
-//   ...treeViewCustomizations,
-// };
-
-interface DashboardProps {
+interface MainLayoutProps {
   children?: React.ReactNode;
 }
 
-export default function Dashboard({ children }: DashboardProps) {
+export default function MainLayout({ children }: MainLayoutProps) {
   return (
     <>
       <CssBaseline enableColorScheme />

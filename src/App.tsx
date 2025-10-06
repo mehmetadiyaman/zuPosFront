@@ -7,9 +7,10 @@
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import LoginPage from "./pages/LoginPage";
-import Dashboard from "./pages/Dashboard";
+import DashboardPage from "./pages/DashboardPage";
 import DepoTanimlama from "./pages/STOK_TANIMLARI/DepoTanimlama";
-import MainGrid from "./components/layout/MainGrid";
+import MainLayout from "./layouts/MainLayout";
+import AuthLayout from "./layouts/AuthLayout";
 import { AuthProvider } from "./contexts/AuthContext";
 
 // ZuPOS teması - Restoran yönetimi için özel tasarlanmış
@@ -74,31 +75,39 @@ function App() {
       <AuthProvider>
         <Router>
           <Routes>
-            {/* Login sayfası - sidebar olmadan */}
-            <Route path="/login" element={<LoginPage />} />
-
-            {/* Ana dashboard sayfası */}
+            {/* Auth Layout - Login ve benzeri sayfalar */}
             <Route
-              path="/dashboard"
+              path="/login"
               element={
-                <Dashboard>
-                  <MainGrid />
-                </Dashboard>
-              }
-            />
-
-            {/* Stok Tanımları sayfaları */}
-            <Route
-              path="/stok-tanimlari/depo-tanimlama"
-              element={
-                <Dashboard>
-                  <DepoTanimlama />
-                </Dashboard>
+                <AuthLayout>
+                  <LoginPage />
+                </AuthLayout>
               }
             />
 
             {/* Root redirect */}
             <Route path="/" element={<Navigate to="/login" replace />} />
+
+            {/* Main Layout - Dashboard ve diğer tüm sayfalar */}
+            <Route
+              path="/dashboard"
+              element={
+                <MainLayout>
+                  <DashboardPage />
+                </MainLayout>
+              }
+            />
+
+            <Route
+              path="/stok-tanimlari/depo-tanimlama"
+              element={
+                <MainLayout>
+                  <DepoTanimlama />
+                </MainLayout>
+              }
+            />
+
+            {/* Diğer sayfalar buraya eklenecek */}
           </Routes>
         </Router>
       </AuthProvider>
